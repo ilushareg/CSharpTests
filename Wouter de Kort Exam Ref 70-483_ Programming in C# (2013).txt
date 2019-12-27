@@ -1,0 +1,25 @@
+Wouter de Kort Exam Ref 70-483_ Programming in C# (2013)
+
+
+==Objective 1.1: Implement multithreading and asynchronous processing
+System.Threading namespace
+new Thread(new ThreadStart/ParameterizedThreadStart(ThreadMethod));
+t.Start();t.Join();
+Thread.Sleep(0) It is used to signal to Windows that this thread is finished.
+Foreground threads can be used to keep an application alive.
+a thread working with file handles or opening database connections should ideally be foreground
+ParameterizedThreadStart can be used if you want to pass some data through Thread.Start(Object o)
+Thread.Abort ThreadAbort - Exception is thrown. A better way to stop a thread is by using a shared variable
+[ThreadStatic] vs [ThreadLocal]: Local - можно контролировать скоуп
+CultureInfo associated with the current thread through Thread.Current- Thread
+Thread.Abort не поддерживается в dotnet 3.0.101 )8
+ExecutionContext.SuppressFlow не разобрался, мутно, но в целом о том, наследует ли ExecutionContext потока рождаемый в нем поток, кажется.
+THREAD POOL
+ThreadPool.QueueUserWorkItem(Func) Ограниченное количество потоков, но они реюзаются, если свободных нет - складывают в очередь
+ThreadPool automatically manages the amount of threads it needs. Увеличивает и уменьшает следую какой-то логике
+!!!The thread pool uses background threads, which do not keep the application running if all foreground threads have terminated.
+Возвращение данных от потока, выполняемого в ThreadPool надо делать вручную
+TASKS
+
+Q: На платформах где Thread.Abort поддерживается выкидывается ли ThreadAbort exception, когда ее прибивают.
+Q: можно ли переопределить логику, которая управляет скалированием ThreadPool-а
