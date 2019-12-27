@@ -27,16 +27,14 @@ namespace CSharpTests
         }
 
     }
-
-    class Program
+    public class ThreadingTests
     {
-        public static int tstatic = 0;
-
-        static void Main(string[] args)
+        public ThreadingTests()
         {
 
-            Console.WriteLine("Hello World!");
-
+        }
+        public void DoTest()
+        {
             Thread[] tList = new Thread[5];
             {
                 for (int i = 0; i < tList.Length; i++)
@@ -51,7 +49,7 @@ namespace CSharpTests
                                 Thread.Sleep(100);
                             }
                         }
-                        catch(Exception e)
+                        catch (Exception e)
                         {
                             Console.WriteLine("Exception caught {0}", e.Message);
                         }
@@ -68,9 +66,27 @@ namespace CSharpTests
             }
             for (int i = 0; i < tList.Length; i++)
             {
+
                 tList[i].Abort();
             }
 
+        }
+    }
+
+    class Program
+    {
+        public static int tstatic = 0;
+
+        static void Main(string[] args)
+        {
+
+            Console.WriteLine("Hello World!");
+
+            //ThreadingTests t = new ThreadingTests();
+            //t.DoTest();
+
+            TaskTests tt = new TaskTests();
+            tt.DoTest();
 
         }
     }
