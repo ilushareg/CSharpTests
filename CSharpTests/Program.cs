@@ -85,7 +85,10 @@ namespace CSharpTests
             //ThreadingTests t = new ThreadingTests();
             //t.DoTest();
 
-            TaskTests tt = new TaskTests();
+            //TaskTests tt = new TaskTests();
+            //tt.DoTest();
+
+            TaskTests1 tt = new TaskTests1();
             tt.DoTest();
 
         }

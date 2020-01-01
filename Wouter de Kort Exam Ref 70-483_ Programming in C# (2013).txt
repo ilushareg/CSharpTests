@@ -20,6 +20,18 @@ ThreadPool automatically manages the amount of threads it needs. Увеличи�
 !!!The thread pool uses background threads, which do not keep the application running if all foreground threads have terminated.
 Возвращение данных от потока, выполняемого в ThreadPool надо делать вручную
 TASKS
+Task can tell you if the work is completed return a result
+task scheduler is responsible for starting the Task and managing it
+By default, the Task scheduler uses threads from the thread pool to execute the Task.
+Task.Run Task.Wait
+t.Result - работает как Wait
+.ContinueWith((i) - для continuation-а, можно передавать результат, типа <TResult>
+You can add different continuation methods that will run when an exception happens, the Task is canceled, or the Task completes successfully
+TaskContinuationOptions.OnlyOnFaulted TaskContinuationOptions.OnlyOnRanToCompletion TaskContinuationOptions.OnlyOnCanceled
+Task can also have several child Tasks. The parent Task fin- ishes when all the child tasks are ready.
+
 
 Q: На платформах где Thread.Abort поддерживается выкидывается ли ThreadAbort exception, когда ее прибивают.
 Q: можно ли переопределить логику, которая управляет скалированием ThreadPool-а
+Q: TaskContinuationOptions.OnlyOnRanToCompletion - можно ли вместо него флаг передать и почему VS mac ругается на i.Result???
+Q: TaskTests Task.WaitAll(childTasks); Надо ли делать в MSVS???
