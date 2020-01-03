@@ -1,7 +1,7 @@
 Wouter de Kort Exam Ref 70-483_ Programming in C# (2013)
 
 
-==Objective 1.1: Implement multithreading and asynchronous processing
+====Objective 1.1: Implement multithreading and asynchronous processing
 System.Threading namespace
 new Thread(new ThreadStart/ParameterizedThreadStart(ThreadMethod));
 t.Start();t.Join();
@@ -14,12 +14,12 @@ Thread.Abort ThreadAbort - Exception is thrown. A better way to stop a thread is
 CultureInfo associated with the current thread through Thread.Current- Thread
 Thread.Abort не поддерживается в dotnet 3.0.101 )8
 ExecutionContext.SuppressFlow не разобрался, мутно, но в целом о том, наследует ли ExecutionContext потока рождаемый в нем поток, кажется.
-THREAD POOL
+==THREAD POOL
 ThreadPool.QueueUserWorkItem(Func) Ограниченное количество потоков, но они реюзаются, если свободных нет - складывают в очередь
 ThreadPool automatically manages the amount of threads it needs. Увеличивает и уменьшает следую какой-то логике
 !!!The thread pool uses background threads, which do not keep the application running if all foreground threads have terminated.
 Возвращение данных от потока, выполняемого в ThreadPool надо делать вручную
-TASKS
+==TASKS
 Task can tell you if the work is completed return a result
 task scheduler is responsible for starting the Task and managing it
 By default, the Task scheduler uses threads from the thread pool to execute the Task.
@@ -29,9 +29,34 @@ t.Result - работает как Wait
 You can add different continuation methods that will run when an exception happens, the Task is canceled, or the Task completes successfully
 TaskContinuationOptions.OnlyOnFaulted TaskContinuationOptions.OnlyOnRanToCompletion TaskContinuationOptions.OnlyOnCanceled
 Task can also have several child Tasks. The parent Task fin- ishes when all the child tasks are ready.
-
+Task.WaitAll, Task.WaitAny - ожидает завершения задач(и) синхронно. Task.WaitAll - создает continuation task, который ждет завершения всех.
+Interlocked - библиотека для атомарных операций синхронизации (exchange и.т.д.)
+==PARALLEL
+Parallel class has a couple of static methods—For, ForEach, and Invoke для добавления паралелизации содержимому Task-а (Parallelism)
+ParallelLoopState для Break or Stop. Break ensures that all iterations that are currently running will be finished. Stop just terminates everything.
+ParallelLoopResult позволяет контролировать, как все прошло.
+==ASYNC/AWAIT
+Появились в C# 5
+work that’s input/output (I/O)–bound сложно параллелить, просто только с CPUBound
+AggregateException - возникает, если что-то идет не так в асинхронном методе, но async/await разворачивает все за нас и отдает внятный exception
+SynchronizationContext в основном применяется, чтобы работа с объектами, которые Non-Thread-Safe (например UI) происходила в конкретном потоке. in both Windows Forms and WPF, a control can only be accessed on the thread on which it was created
+A void returning async method is effectively a fire-and-forget method. Не будет эксепшенов выкинуто наружу
+==PLINQ (Parallel Language Integrated Query)
+Enumerable.AsParallel WithExecutionMode WithDegreeOfParallelism (number of processors up to 64). AsSequential
+Order is not guaranteed! Надо AsOrdered, чтобы сохранить порядок. the results are buffered and sorted
+==CONCURRENT COLLECTIONS
+- BlockingCollection<T>
+- ConcurrentBag<T> It enables duplicates and it has no particular order. Important methods are Add, TryTake, and TryPeek.
+implements IEnumerable<T> made thread-safe by making a snapshot of the collection
+- ConcurrentQueue<T> - ConcurrentStack<T> When you enumerate the collection, a snapshot is taken.
+- ConcurrentDictionary<TKey,T>
 
 Q: На платформах где Thread.Abort поддерживается выкидывается ли ThreadAbort exception, когда ее прибивают.
 Q: можно ли переопределить логику, которая управляет скалированием ThreadPool-а
 Q: TaskContinuationOptions.OnlyOnRanToCompletion - можно ли вместо него флаг передать и почему VS mac ругается на i.Result???
-Q: TaskTests Task.WaitAll(childTasks); Надо ли делать в MSVS???
+Q: TaskTests Task.WaitAll(childTasks); на мак не дождался child потоков, Надо ли делать в MSVS???
+Q: SynchronizationContext посмотреть в других книгах и дочитать https://docs.microsoft.com/en-us/archive/msdn-magazine/2011/february/msdn-magazine-parallel-computing-it-s-all-about-the-synchronizationcontext
+Q: Прочитать про pitfals PLINQ и остальных https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/potential-pitfalls-in-data-and-task-parallelism
+
+
+====Objective 1.2: Manage multithreading
