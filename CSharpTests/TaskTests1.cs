@@ -9,6 +9,7 @@ namespace CSharpTests
     {
         public TaskTests1()
         {
+            
         }
         public void DoTest()
         {
