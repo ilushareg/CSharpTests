@@ -88,7 +88,7 @@ namespace CSharpTests
             //TaskTests tt = new TaskTests();
             //tt.DoTest();
 
-            TestAsyncAwait tt = new TestAsyncAwait();
+            YieldTests tt = new YieldTests();
             tt.DoTest();
 
         }

@@ -59,4 +59,166 @@ Q: SynchronizationContext посмотреть в других книгах и �
 Q: Прочитать про pitfals PLINQ и остальных https://docs.microsoft.com/en-us/dotnet/standard/parallel-programming/potential-pitfalls-in-data-and-task-parallelism
 
 
-====Objective 1.2: Manage multithreading
+====Objective 1.2: Manage multithreading (доступ к ресурсам, локи)
+Interlocked class позволяет использовать атомарные операции, как Interlocked.Exchange Increment Decrement CompareExchange
+Use the lock statement on a private object to synchronize access to a piece of code
+Cancel tasks by using the CancellationTokenSource class with a CancellationToken
+
+1D
+2B
+3B
+Q: ManageMultithreadingExceptionHandling cancellationToken vs continuation разобраться, сложно!!!???
+
+====Objective 1.3: Implement program flow
+doesn’t have to evaluate the right part of your expression. This is called short-circuiting.
+Q: сработает ли с читами или compile time?
+
+The ?? operator is called the null-coalescing operator.
+
+Q: int? x
+You need to have a state- ment such as break or return that explicitly exits the switch statement
+for: The condition is evaluated on each iteration
+1С
+2D
+3С
+
+====Objective 1.4: Create and implement events and callbacks
+==DELEGATES
+A delegate is a type that defines a method signature
+delegate can be a nested type
+invocation list can be modified with + += - -= and invoked by ()
+delegates inherit from the System.MulticastDelegate class that in turn inherits from System.Delegate.
+delegates support covariance and contravariance
+Q: blog post on covariance and contravariance http://blogs.msdn.com/b/ericlippert/archive/tags/covariance+and+contravariance/
+
+==LAMBDA EXPRESSIONS
+In C#, 2.0 anonymous methods were added. In C# 3.0, things became even better when lambda expressions were added.
+lambda functions are called anonymous functions
+return and parameter types aren't specified.
+.NET Framework has a couple of built-in delegate types
+в system неймспейсе есть встроенные типы Func<...>, унаследованные от System.MulticastDelegate
+делегат без return типа - это System.Action
+closure - когда делегат использует какие-то переменные на стеке или this (он вроде тоже не стеке?) и переживает скоуп в котором был определен
+design pattern publish-subscribe позволяет компонентам приложения избежать tight coupling и подписываться на события
+If there would be no subscribers to an event, the OnChange property would be null.
+
+=EVENTS
+with the event syntax, the compiler protects your field from unwanted access.
+Подписывать можно много раз один и тот же EventHandler, каждый -= убирает один экземпляр подписки
+Custom event accessor позволяет переопределить add/remove
+It’s important to put a lock around adding and removing subscribers to make sure that the operation is thread safe.
+you shouldn't depend on order of execution
+exception останавливает рассылку ивентов. Если нужно - надо рассылать вручную, получив invocationlist из базового System.Delegate
+
+1a
+2b,c
+3a
+
+====Objective 1.5: Implement exception handling
+Нельзя поймать StackOverflowException выброшеный системой =)
+Environment.FailFast роняет приложение совсем не позволяя finally выполниться
+System.Runtime.ExceptionServices.ExceptionDispatchInfo = ExceptionDispatchInfo.Capture чтобы сохранить информацию о прерывании can be used when you want to catch an exception in one thread and throw it on another thread.
+add the Serializable attribute, to make sure that your exception can be serialized and works correctly across application domains
+You should never inherit from System.ApplicationException the class became useless and lost its meaning
+
+1d
+2b
+3abc
+
+Q: чем прерывания лучше ошибок?
+Тем что они объекты (но и ошибки могут так)
+Можно рапортовать (обработать?) какие-то непредусмотренные ситуации, ловя Exception
+Q: inner exception vs ExceptionDispatchInfo
+
+========Create and use types Chapter2
+Enumerations can also be used with a special Flags attribute
+The benefit of storing data on the stack is that it’s faster, smaller, and doesn’t need the attention of the garbage collector
+You cannot directly inherit from System.ValueType. Instead, you can use the struct keyword to create a new value type.
+indexer: public Card this[int index]
+whole class can be declared static
+Default ctor isn't created if there is an overload with params
+Constructor chaining: public ConstructorChaining() : this(3) { }
+A Nullable is a wrapper around a value type with a Boolean flag that it stores if the Nullable has a value set.
+T defaultValue = default(T);
+extension methods enable you to add new capabilities to an existing type public static decimal Discount(this Product product)
+extension method also can be declared on an interface (such as IEnumerable<T>)
+extension class can't be nested
+==Overriding Methods
+You can disable inheritance by using the sealed keyword on a class or a method.
+
+1b
+2a
+3c
+
+Q:read “unsafe (C# Reference)” at http://msdn.microsoft.com/en-us/ library/chfa2zb8.aspx.
+Q: Normally, a value type would need to be boxed to be used in a nongeneric collection. By using generics, you can avoid the performance penalty for boxing and unboxing.
+
+====Objective 2.2: Consume types
+dynamic keyword override the compile-time checking and work with C# as a weakly typed language.
+If you execute an invalid unbox operation, the runtime will throw an InvalidCastException.
+When using the nongeneric collections to store a value type, you have a lot of boxing-unboxing
+boxing puts pressure on the garbage collector to remove all the packaged value types from the heap
+==Converting between different types
+public static implicit/explicit operator decimal(Money money)
+is/as operators (as returns null if conversion is not possible like dynamic_cast)
+dynamic keyword запоминает код для runtime интерпретации и не проверяет типы
+By using DynamicObject, you can create truly dynamic objects and have full control over how they operate at runtime.
+
+
+Q: cast operator as extension method? - нет
+Q: Exporting some data to Excel (try) - no
+Q: helper class that aids in converting item . HOW?
+Q: где generic collections хранят данные heap или stack?
+
+1b
+2ac
+3a
+====Objective 2.3: Enforce encapsulation
+[assembly:InternalsVisibleTo(“Friend1a”)] include this attribute inside the AssemblyInfo.cs
+enum interface allways public, struct can't be protected (no inheritance possilbe)
+access modifier of the enclosing type is always taken into account
+exceptions to this (for example, when an internal class implements a public interface or when a class overrides a public virtual member of a base class)
+==Using explicit interface implementations
+Explicit interface implementation means that an interface type element can be accessed only when using the interface directly.
+void IInterfaceA.MyMethod() { }
+
+====Objective 2.4: Create and implement a class hierarchy
+interface might define a property with only a get accessor
+You can also use generics when defining interfaces.
+Multiple inheritance is not supported in C#
+==Creating and using base classes
+terms base and derived class to avoid any confusion with inheritance in the real world.
+==Changing behavior
+the new keyword, which explicitly hides the member from a base class
+==Abstract and sealed base classes
+abstract classes
+sealed classes (struct is sealed by default)
+Marking a class as sealed is a good practice.
+
+
+
+Q: в каком порядке вызываются конструкторы base?
+Q: может быть virtual property?
+Q: попробовать generic exrension
+Q: repository pattern interface vs generic vs extension. What's used int LIST?
+
+====Implementing standard .NET Framework interfaces
+IComparable is used to sort elements
+IEnumerable helps you to implement the iterator pattern. exposes GetEnumerator
+enumerator has a MoveNext method that returns the next item in the collection.
+Yield is a special keyword that can be used only in the context of iterators. It instructs the compiler to convert this regular code to a state machine.
+IDisposable is used to facilitate working with external, unmanaged resources.
+
+
+Q: как построить стейтмашину с Yield?
+
+
+Q: IComparable Что делать, если хочется сортировать по разным свойствам? Func<int>?
+
+
+Q: что за запись? using (List<int>.Enumerator enumerator = numbers.GetEnumerator()) откуда using?
+====READING
+blog post on covariance and contravariance http://blogs.msdn.com/b/ericlippert/archive/tags/covariance+and+contravariance/
+read “unsafe (C# Reference)” at https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/unsafe
+information about designing systems with high cohesion and low coupling can be found at http://msdn.microsoft.com/en-us/magazine/cc947917.aspx
+SOLID
