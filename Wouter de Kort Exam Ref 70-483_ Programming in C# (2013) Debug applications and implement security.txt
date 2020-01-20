@@ -1,0 +1,26 @@
+p202 Debug applications and implement security
+
+====Objective 3.1: Validate application input
+Entity integrity States that each entity (a record in a database) should be uniquely identifiable.
+целостность сущности когда идентификатор цел
+целостность содержимого
+целостность ссылок
+целостность с пользовательской точки зрения - какие-то бизнесс правила
+A primary key uniquely identifies each row of data. A foreign key is used to point to another record
+define your object model in code and then let the Entity Framework gen- erate a database that can store your model.
+Triggers are special methods that run when data in your database is updated, inserted, or removed
+EntityFramework имеет аттрибуты, которые управляют тем, как модель попадает в БД ([Required, MaxLength(20)])
+using transactions (locks on client side). A transaction helps you group a set of related operations on a database.
+==Using Parse, TryParse, and Convert
+Convert throws an OverflowException when the parsed or converted value is too large
+==Using regular expressions
+==Validating JSON and XML
+You can create an XSD file for this schema by using the XML Schema Definition Tool
+
+
+p192
+1b
+2b
+3d
+
+====Objective 3.2 Perform symmetric and asymmetric encryption

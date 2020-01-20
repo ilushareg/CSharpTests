@@ -192,6 +192,8 @@ terms base and derived class to avoid any confusion with inheritance in the real
 the new keyword, which explicitly hides the member from a base class
 ==Abstract and sealed base classes
 abstract classes
+An abstract class enables you to share both implemented methods and method signatures that a derived class needs to implement.
+
 sealed classes (struct is sealed by default)
 Marking a class as sealed is a good practice.
 
@@ -208,7 +210,12 @@ IEnumerable helps you to implement the iterator pattern. exposes GetEnumerator
 enumerator has a MoveNext method that returns the next item in the collection.
 Yield is a special keyword that can be used only in the context of iterators. It instructs the compiler to convert this regular code to a state machine.
 IDisposable is used to facilitate working with external, unmanaged resources.
+Использование оператора using обеспечивает вызов метода Dispose, даже если в блоке using возникает исключение.
 
+161
+1b
+2b
+3bd
 
 Q: как построить стейтмашину с Yield?
 
@@ -217,8 +224,77 @@ Q: IComparable Что делать, если хочется сортироват
 
 
 Q: что за запись? using (List<int>.Enumerator enumerator = numbers.GetEnumerator()) откуда using?
+
+
+====Objective 2.5: Find, execute, and create types at runtime by using reflection
+generating code at runtime by using both CodeDom and expression trees
+==ATTRIBUTES
+Attributes can be added to all kinds of types: assemblies, types, methods, parameters, and properties.
+ConditionalAttribute to indicate to the compiler that a method call should be ignored unless a specific compiler option is specified.
+Attribute can be an attribute applied to a whole assembly, a class, a specific method, or even a parameter of a method. [assembly: AssemblyTitle(“ClassLibrary1”)]
+attributes can be read at runtime through reflection
+The System.Attribute class, from which all other attributes inherit, defines some static methods to see whether attribute is applied
+you can also create your own attributes
+attributes require all properties to be read-write.
+==REFLECTION
+
+162
+1d
+2b
+3c
+
+====Objective 2.6: Manage the object life cycle
+==GC
+Because of this, all threads are frozen while doing a collect operation.
+This can have a huge performance impact
+The garbage collector starts clean- ing up only when there is not enough room on the heap to construct a new object (or when Windows signals that it’s low on memory).
+it tries to do this on a moment that the usage of the application is low.
+==Managing unmanaged resources
+Because of this, C# supports the concept of finalization.
+the finalizer is called only when a garbage collection occurs.
+You can force this by adding a call to GC.Collect
+WaitForPendingFinalizers makes sure that all finalizers have run before the code continues.
+it’s not recommended that you call GC.Collect yourself.
+C# offers the idea of the IDisposable interface
+you need to wrap all types that implement IDisposable in a try/finally statement.
+call Dispose in the finally clause.
+Using a disposed item will result in an ObjectDisposedException.
+C# has a special statement for this: the using statement.
+==Implementing IDisposable and a finalizer
+System.GC.SuppressFinalize(this); to remove object from finalization list GC keeps track of
+A class that implements IDisposable should have some unmanaged resources.
+root reference - A root can be a static field, a method parameter, a local variable, or a CPU register.
+
+Q: синхронно ли выполняется GarbageCollection. есть ли шанс, что weak ref сколлектится в процессе работы?
+Q: почему weakref не отпускается в процессе, где-то на объект появляется ref?
+
+p181
+1c
+2d
+3c
+p198
+
+====Objective 2.7: Manipulate strings
+string is immutable, so it cannot be changed after it has been created. Every change to a string will create a new string.
+When creating two identical string literals in one compilation unit, the compiler ensures that only one string object is created by the CLR. (Compile time string interning)
+.NET Framework offers some special helper classes when dealing with strings. StringBuilder it is
+==StringBuilder
+==StringWriter and StringReader
+These classes adapt the interface of the StringBuilder so they can be used in places where a TextWriter or TextReader is expected.
+==Searching for strings
+String class offers a couple of methods that can help you perform all kinds of search actions. The most common are IndexOf, LastIndexOf, StartsWith, EndsWith, and SubString.
+string methods can be culture sensitive.
+always try to avoid the methods that don’t use an explicit value of StringComparison.
+
+p190
+1a
+2b
+3b
+
+
 ====READING
 blog post on covariance and contravariance http://blogs.msdn.com/b/ericlippert/archive/tags/covariance+and+contravariance/
 read “unsafe (C# Reference)” at https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/unsafe
 information about designing systems with high cohesion and low coupling can be found at http://msdn.microsoft.com/en-us/magazine/cc947917.aspx
 SOLID
+string best practices https://docs.microsoft.com/en-us/dotnet/standard/base-types/best-practices-strings

@@ -42,7 +42,7 @@ namespace CSharpTests
             }
 
             public IEnumerator<TestEntity> GetEnumerator()
-            {
+            {   
                 int k = 0;
                 while(k++<100)
                 {

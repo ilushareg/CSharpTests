@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace CSharpTests
 {
@@ -27,14 +29,43 @@ namespace CSharpTests
         }
 
     }
+
     public class ThreadingTests
     {
+        public delegate bool checkfilter(IEnumerable<string> si);
+        Func<string, bool> chrckfunc = (s) => { return (s.Length > 2); };
+
+        static WeakReference wr = null;
+
         public ThreadingTests()
         {
+            wr = new WeakReference(new int[100]);
+            int[] a = (int[])wr.Target;
+            
 
         }
         public void DoTest()
         {
+            Console.WriteLine("starting");
+
+            //checkfilter a = Func<IEnumerable<string>, bool>((s) => { return (s.Length > 2); });
+
+
+            List<string> ls = new List<string>();
+            ls.Add("aaa");
+            ls.Add("aa");
+            ls.Add("VVVa");
+
+            IEnumerable<string> filtered = ls.Where(chrckfunc);
+            foreach(string s in filtered)
+            {
+                Console.WriteLine(s);
+
+            }
+
+            return;
+
+
             Thread[] tList = new Thread[5];
             {
                 for (int i = 0; i < tList.Length; i++)
@@ -88,7 +119,7 @@ namespace CSharpTests
             //TaskTests tt = new TaskTests();
             //tt.DoTest();
 
-            YieldTests tt = new YieldTests();
+            StringTests tt = new StringTests();
             tt.DoTest();
 
         }
