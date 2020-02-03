@@ -119,8 +119,14 @@ namespace CSharpTests
             //TaskTests tt = new TaskTests();
             //tt.DoTest();
 
-            StringTests tt = new StringTests();
+            //ExceptionTests tt = new ExceptionTests();
+            //tt.DoTest();
+
+            ConditionalTests tt = new ConditionalTests();
             tt.DoTest();
+
+            //StringTests tt = new StringTests();
+            //tt.DoTest();
 
         }
     }

@@ -24,3 +24,38 @@ p192
 3d
 
 ====Objective 3.2 Perform symmetric and asymmetric encryption
+A key is kept secret. A key is used by an algorithm to control the encryption process.
+A symmetric algorithm uses one single key to encrypt and decrypt the data.
+An asymmetric algorithm uses two different keys. One is public and other is private
+Symmetric encryption is faster than asymmetric encryption
+another important concept in cryptography is the initialization vector (IV). В результате один и тот же текст зашифрованный повторно дает разные результаты.
+====Working with encryption in the .NET Framework
+One symmetric algorithm is the Advanced Encryption Standard (AES).
+==Using hashing
+
+p231
+1c
+2a
+3b
+====Objective 3.3 Manage assemblies
+p242
+1c
+2b
+3ac
+====Objective 3.4 Debug an application
+DebuggerDisplayAttribute to make debugging easier
+p253
+1b c?
+2a
+3b?
+
+====Objective 3.5 Implement diagnostics in an application
+TraceSource TraceListener as Diagnostics source-destination
+you can also write events to the Windows Event Log. You do this by using the EventLog class in the System.Diagnostics
+The EventLog also gives you the option to subscribe to changes in the event log
+==Profiling your application
+==Creating and monitoring performance counters
+p268
+1d
+2c =(
+3b

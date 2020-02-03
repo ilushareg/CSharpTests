@@ -36,20 +36,9 @@ namespace CSharpTests
                 }
                 Recursive(++n);
             }
-            catch (StackDepthException e)
-            {
-                e.depth++;
-
-                throw;
-            }
-            catch (StackOverflowException e)
-            {
-                Console.WriteLine("StackOverflow caught");
-                throw new StackDepthException(e);
-
-            }
             catch (Exception e)
             {
+                //throw;
                 Console.WriteLine("Caught general exception");
                 System.Runtime.ExceptionServices.ExceptionDispatchInfo ex = ExceptionDispatchInfo.Capture(e);
                 ex.Throw();
@@ -64,14 +53,18 @@ namespace CSharpTests
                 Recursive(0);
                 //throw (new Exception("ksjdhksjdfh"));
             }
-            catch(StackDepthException e)
-            {
-                Console.WriteLine("depth = {0}", e.depth);
-
-            }
             catch (Exception e)
             {
-                Console.WriteLine("Caught Exception");
+                Console.WriteLine(e.StackTrace);
+
+                Exception curr = e;
+
+                while (curr != null)
+                {
+                    Console.WriteLine("depth ");
+
+                    curr = e.InnerException;
+                }
             }
         }
 
