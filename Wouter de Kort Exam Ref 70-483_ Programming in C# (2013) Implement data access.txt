@@ -1,2 +1,21 @@
-Implement data access
+4 Implement data access
+====Objective 4.1: Perform I/O operations
 p276
+==Working with files
+Never try to manually add strings together to form a path. Always use the Path class
+==The file system is not just for you
+Normally, when dealing with a situation in which multiple users access shared resources, we start using a locking mechanism to synchronize resource usage.
+However, the file system does not have these locking mechanisms. It is a multithreaded system, but without any of the safety regulations that you want to see.
+When working with the file system, you need to remind yourself that exceptions can and will occur.
+
+Async/await
+File class does not support real asynchronous I/O
+For real async I/O, you need to use the FileStream object and pass a true value for the useAsync parameter.
+Running I/O operations in parallel
+
+p292
+1a
+2a
+3a
+
+====Objective 4.2: Consume data

@@ -122,7 +122,7 @@ namespace CSharpTests
             //ExceptionTests tt = new ExceptionTests();
             //tt.DoTest();
 
-            ConditionalTests tt = new ConditionalTests();
+            FileTests tt = new FileTests();
             tt.DoTest();
 
             //StringTests tt = new StringTests();
