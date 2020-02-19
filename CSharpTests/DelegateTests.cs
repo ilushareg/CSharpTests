@@ -83,12 +83,12 @@ namespace CSharpTests
             IInput iC = cheater;
 
             iS.RegisterListener(inputReceiver);
+            //proxy for cheater to receive the input
             iS.RegisterListener((sender, e) => { cheater.ReactToInput(e.Value); });
             iC.RegisterListener(inputReceiver);
 
-            simple.MakeInput(11);
-            simple.MakeInput(22);
 
+            simple.MakeInput(11);
         }
     }
 }
