@@ -9,77 +9,86 @@ namespace CSharpTests
     {
         public DelegateTests()
         {
-            
+
         }
-        public class MyArgs : EventArgs
+
+        //int arg for Event Handler
+        public class InputArgs : EventArgs
         {
-            public MyArgs(int value)
+            public InputArgs(int value)
             {
                 Value = value;
             }
             public int Value { get; set; }
         }
-        public class Pub
+
+        interface IInput
         {
-            public event EventHandler<MyArgs> OnChange = delegate { };
-            public void Raise()
+            //register listener to send the input events to
+            void RegisterListener(EventHandler<InputArgs> act);
+        }
+
+        //simple input 
+        public class InputSimple:IInput
+        {
+            private event EventHandler<InputArgs> OnInput = delegate { };
+            public InputSimple()
             {
-                OnChange(this, new MyArgs(42));
+
+            }
+            public void RegisterListener(EventHandler<InputArgs> act)
+            {
+                OnInput += act;
+            }
+            public void MakeInput(int v)
+            {
+                OnInput(this, new InputArgs(v));
             }
         }
-        public void CreateAndRaise()
+
+        //cheater player, listens for input from other player and fires its own
+        public class InputCheater:IInput
         {
-            Pub p = new Pub();
-            int a = 0;
-
-            EventHandler<MyArgs> act = (sender, e)
-                =>
+            private event EventHandler<InputArgs> OnInput = delegate { };
+            public InputCheater()
             {
-                int z = a;
-                Console.WriteLine("Event raised: {0} {1}", e.Value, z);
-            };
 
-            p.OnChange += act;
-
-            a = 1;
-            p.OnChange += act;
-            p.OnChange += act;
-
-            //p.OnChange -= (sender, e)
-            //    => Console.WriteLine("Event raised: {0}", e.Value);
-
-            p.Raise();
+            }
+            public void RegisterListener(EventHandler<InputArgs> act)
+            {
+                OnInput += act;
+            }
+            public void ReactToInput(int val)
+            {
+                OnInput(this, new InputArgs(val + 1));
+            }
         }
 
         public void DoTest()
         {
-            try
-            {
-                Console.WriteLine("try");
-            }
-            catch (Exception e)
-            {
 
-            }
-            finally
+            //someone to receive inputs from both players
+            EventHandler<InputArgs> inputReceiver = (sender, e)
+                =>
             {
-                Console.WriteLine("finally");
+                Console.WriteLine("Input in: {0}", e.Value);
+            };
 
-            }
-            try
-            {
-                Console.WriteLine("try");
-            }
-            catch (Exception e)
-            {
+            //simple player
+            InputSimple simple = new InputSimple();
+            IInput iS = simple;
 
-            }
-            finally
-            {
-                Console.WriteLine("finally");
+            //player cheater
+            InputCheater cheater = new InputCheater();
+            IInput iC = cheater;
 
-            }
-            //CreateAndRaise();
+            iS.RegisterListener(inputReceiver);
+            iS.RegisterListener((sender, e) => { cheater.ReactToInput(e.Value); });
+            iC.RegisterListener(inputReceiver);
+
+            simple.MakeInput(11);
+            simple.MakeInput(22);
+
         }
     }
 }
